@@ -1,3 +1,29 @@
+# ============================================================
+# 📘 Chat with PDF — An Intelligent RAG App for Document Insight
+# ============================================================
+# 🧠 Author: Lavanya Srivastava
+# 📍 Country: India | 🌐 Global AI Developer & Trainer
+# 🗓️ Year: 2025
+# 🔗 Live Demo: https://w7hmkx6rpbmvp6obpnkcby.streamlit.app/
+#
+# ⚖️ Copyright (c) 2025 Lavanya Srivastava. All Rights Reserved.
+# ------------------------------------------------------------
+# This project is proprietary intellectual property.
+# Unauthorized reproduction, redistribution, or modification,
+# in any form or medium, without explicit written permission
+# from the author is strictly prohibited.
+#
+# For educational or research citation:
+# “Chat with PDF — Developed by Lavanya Srivastava (2025).”
+#
+# This application demonstrates production-grade skills in:
+#  • LangChain RAG pipeline design
+#  • FAISS vector indexing
+#  • Streamlit-based conversational UX
+#  • Secure key management using st.secrets and .env fallback
+#  • Cloud deployment (Streamlit / Azure / Local hybrid)
+# ============================================================
+
 import os
 import shutil
 import streamlit as st
@@ -66,7 +92,6 @@ def get_conversational_chain():
     )
 
     if CHAT_BACKEND == "groq":
-        # Use Groq (recommended: quick + no Google deps)
         try:
             from langchain_groq import ChatGroq
         except Exception as e:
@@ -84,9 +109,7 @@ def get_conversational_chain():
         )
         return load_qa_chain(llm, chain_type="stuff", prompt=prompt)
 
-    # Fallback / Gemini path
     try:
-        # Import inside to avoid ModuleNotFoundError when using Groq
         import google.generativeai as genai
         from langchain_google_genai import ChatGoogleGenerativeAI
     except Exception as e:
@@ -97,7 +120,6 @@ def get_conversational_chain():
         st.error("GOOGLE_API_KEY not found in .env. Set it or switch CHAT_BACKEND to 'groq'.")
         raise RuntimeError("Missing GOOGLE_API_KEY")
 
-    # Configure Gemini client
     try:
         genai.configure(api_key=GOOGLE_API_KEY)
     except Exception as e:
@@ -105,8 +127,8 @@ def get_conversational_chain():
         raise
 
     llm = ChatGoogleGenerativeAI(
-        model=GEMINI_MODEL,       # e.g., "gemini-1.5-flash" or "gemini-1.5-pro"
-        api_version="v1",         # force stable API to avoid v1beta 404s
+        model=GEMINI_MODEL,
+        api_version="v1",
         temperature=0.3,
         max_output_tokens=1024,
     )
@@ -156,7 +178,6 @@ def main():
                     try:
                         raw_text = get_pdf_text(pdf_docs)
                         chunks = get_text_chunks(raw_text)
-                        # Rebuild index fresh
                         if os.path.isdir(INDEX_DIR):
                             shutil.rmtree(INDEX_DIR)
                         get_vector_store(chunks)
