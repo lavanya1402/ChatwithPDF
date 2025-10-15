@@ -1,0 +1,24 @@
+# Ignore environment and key files
+.env
+.env.*
+
+# Ignore Python cache and virtual environments
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+venv/
+ENV/
+env/
+
+# Ignore FAISS local index and temporary files
+faiss_index/
+temp/
+*.tmp
+*.log
+
+# Streamlit and IDE files
+.streamlit/
+.vscode/
+.idea/
